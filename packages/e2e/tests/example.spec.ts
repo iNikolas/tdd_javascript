@@ -16,7 +16,7 @@ test.describe("Can start a to-do list", () => {
   test("user invited to enter a to-do item straight away", async ({
     todoPage,
   }) => {
-    const inputBox = todoPage.page.locator("input.new-todo");
+    const inputBox = todoPage.page.locator("input[name='new-todo']");
     await expect(inputBox).toBeVisible();
     await expect(inputBox).toHaveAttribute("placeholder", "Enter a to-do item");
 
@@ -31,7 +31,7 @@ test.describe("Can start a to-do list", () => {
 
       todoPage.page.waitForTimeout(1000);
 
-      const table = todoPage.page.getByTestId("list-table");
+      const table = todoPage.page.getByRole("table", { name: "to-do list" });
       const row = table.getByRole("row", { name: new RegExp(`${text}`, "gi") });
       await expect(row).toBeVisible();
     });
