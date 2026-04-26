@@ -43,9 +43,7 @@ test("Renders input form", () => {
   render(<Page />);
 
   const form = screen.getByRole("form", { name: /to-do form/i });
-  const input = form.querySelector("input[name='njew-todko']");
-  console.log(input);
+  const input = form.querySelector("input[name='new-todo']");
   expect(form, "Form must be rendered").toBeDefined();
-  console.log(input instanceof React.Element);
-  // expect(input.insta, "Input must be rendered").notT();
+  expect(input != null, "Input must be rendered").toBeTruthy();
 });
