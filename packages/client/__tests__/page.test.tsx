@@ -2,6 +2,7 @@ import { expect, suite, test } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 
 import Page from "../app/page";
+import { fetchWithError } from "@/utils";
 
 test("Application must have correct title", () => {
   render(<Page />);
@@ -46,4 +47,17 @@ test("Renders input form", () => {
   const input = form.querySelector("input[name='new-todo']");
   expect(form, "Form must be rendered").toBeDefined();
   expect(input != null, "Input must be rendered").toBeTruthy();
+});
+
+test("Can save a POST request", async () => {
+  const text = "New Item Test";
+  const response = await fetchWithError("http://localhost:3000", {
+    method: "POST",
+    body: JSON.stringify({ newTodo: text }),
+  });
+
+  expect(
+    JSON.stringify(response),
+    `Successful response must contain "${text}" and to be serialized`,
+  ).toContain(text);
 });
