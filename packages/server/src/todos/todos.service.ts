@@ -5,7 +5,7 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 @Injectable()
 export class TodosService {
   create(createTodoDto: CreateTodoDto) {
-    return 'This action adds a new todo';
+    return createTodoDto;
   }
 
   findAll() {

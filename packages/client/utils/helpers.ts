@@ -35,7 +35,7 @@ async function safeJsonParse<T>(response: Response): Promise<T> {
   }
 }
 
-export function exactErrorMessage(
+export function extractErrorMessage(
   error: unknown,
   fallback = "Unknown Error",
 ): string {
@@ -143,7 +143,7 @@ export async function fetchWithError<T>(
         );
       }
 
-      const errorMessage = exactErrorMessage(
+      const errorMessage = extractErrorMessage(
         data,
         `HTTP ${status}: ${response.statusText}`,
       );

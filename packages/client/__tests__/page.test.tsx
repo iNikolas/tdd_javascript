@@ -2,7 +2,7 @@ import { expect, suite, test } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 
 import Page from "../app/page";
-import { fetchWithError } from "@/utils";
+import { extractErrorMessage, fetchWithError } from "@/utils";
 
 test("Application must have correct title", () => {
   render(<Page />);
@@ -51,13 +51,21 @@ test("Renders input form", () => {
 
 test("Can save a POST request", async () => {
   const text = "New Item Test";
-  const response = await fetchWithError("http://localhost:3000", {
-    method: "POST",
-    body: JSON.stringify({ newTodo: text }),
-  });
 
-  expect(
-    JSON.stringify(response),
-    `Successful response must contain "${text}" and to be serialized`,
-  ).toContain(text);
+  try {
+    const response = await fetchWithError("http://localhost:3001/todos", {
+      method: "POST",
+      body: JSON.stringify({ newTodo: text }),
+    });
+
+    expect(
+      JSON.stringify(response),
+      `Successful response must contain "${text}" and to be serialized`,
+    ).toContain(text);
+  } catch (error) {
+    expect(
+      error,
+      `Must not throw an error: ${extractErrorMessage(error)}`,
+    ).toBeUndefined();
+  }
 });
