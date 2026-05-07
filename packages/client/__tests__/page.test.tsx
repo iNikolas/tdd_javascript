@@ -1,8 +1,8 @@
 import { expect, suite, test } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
+import { fetchWithError, extractErrorMessage } from "shared/utils";
 
 import Page from "../app/page";
-import { extractErrorMessage, fetchWithError } from "@/utils";
 
 test("Application must have correct title", () => {
   render(<Page />);

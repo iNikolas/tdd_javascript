@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import type { DB } from 'src/db';
+import { InjectDb } from 'src/db/db.provider';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Injectable()
 export class TodosService {
+  constructor(@InjectDb() private readonly db: DB) {}
+
   create(createTodoDto: CreateTodoDto) {
     return createTodoDto;
   }
