@@ -14,7 +14,7 @@
     "test:server": "npm run test --workspace=server",
     "test:e2e": "npm run test --workspace=e2e",
     "build:shared": "npm run build --workspace=shared",
-    "db:push": "npm run db:push --workspace=server"
+    "db:push": "npm run db:push --workspace=shared"
   },
   "keywords": [],
   "author": "Mykola Lebid",

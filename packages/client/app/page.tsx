@@ -1,10 +1,10 @@
 import { Input } from "@/components/ui/input";
-import { Table } from "@/components/ui/table";
+import { TodosList } from "./_components";
 
 export default function Home() {
   return (
-    <main className="prose p-4 w-full max-w-3xl mx-auto">
-      <h2>Your To-Do List</h2>
+    <main className="p-4 w-full max-w-3xl mx-auto">
+      <h2 className="prose">Your To-Do List</h2>
       <form aria-label="to-do form">
         <Input
           type="text"
@@ -13,7 +13,7 @@ export default function Home() {
           placeholder="Enter a to-do item"
         />
       </form>
-      <Table aria-label="to-do list" />
+      <TodosList />
     </main>
   );
 }
