@@ -5,7 +5,7 @@ import path from "path";
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 export default defineConfig({
-  entry: ["db/index.ts", "utils/index.ts"],
+  entry: ["db/index.ts", "utils/index.ts", "entities/index.ts"],
   format: ["cjs", "esm"],
   dts: true,
   clean: true,

@@ -1,6 +1,6 @@
-import { pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
-export const userTable = pgTable('todo', {
+export const todoTable = pgTable("todo", {
   id: uuid().primaryKey().defaultRandom(),
   text: varchar().notNull(),
 });

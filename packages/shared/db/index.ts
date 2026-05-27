@@ -4,3 +4,5 @@ export * from "./constants";
 
 import { default as db } from "./client";
 export default db;
+
+export * from "drizzle-orm";

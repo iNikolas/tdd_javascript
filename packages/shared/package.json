@@ -13,6 +13,11 @@
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.mjs",
       "require": "./dist/utils/index.js"
+    },
+    "./entities": {
+      "types": "./dist/entities/index.d.ts",
+      "import": "./dist/entities/index.mjs",
+      "require": "./dist/entities/index.js"
     }
   },
   "scripts": {
@@ -34,6 +39,8 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
     "dotenv": "^17.4.1",
     "drizzle-orm": "^0.45.2",
     "pg": "^8.21.0"

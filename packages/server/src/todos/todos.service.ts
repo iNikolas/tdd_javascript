@@ -1,30 +1,53 @@
 import { Injectable } from '@nestjs/common';
-import type { DB } from 'shared/db';
+import { todoTable, type DB, eq } from 'shared/db';
 import { InjectDb } from 'src/db/db.provider';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import type {
+  CreateTodoDto,
+  UpdateTodoDto,
+  CreateTodoResponse,
+  TodosResponse,
+} from 'shared/entities';
 
 @Injectable()
 export class TodosService {
   constructor(@InjectDb() private readonly db: DB) {}
 
-  create(createTodoDto: CreateTodoDto) {
-    return createTodoDto;
+  async create(createTodoDto: CreateTodoDto): Promise<CreateTodoResponse> {
+    const [todo] = await this.db
+      .insert(todoTable)
+      .values(createTodoDto)
+      .returning();
+    return todo;
   }
 
-  findAll() {
-    return `This action returns all todos`;
+  async findAll(): Promise<TodosResponse> {
+    const todos = await this.db.select().from(todoTable);
+    return { todos };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} todo`;
+  async findOne(id: string): Promise<CreateTodoResponse> {
+    const todo = await this.db
+      .select()
+      .from(todoTable)
+      .where(eq(todoTable.id, id))
+      .limit(1);
+    return todo[0];
   }
 
-  update(id: number, _updateTodoDto: UpdateTodoDto) {
-    return `This action updates a #${id} todo`;
+  async update(
+    id: string,
+    updateTodoDto: UpdateTodoDto,
+  ): Promise<CreateTodoResponse> {
+    const [todo] = await this.db
+      .update(todoTable)
+      .set(updateTodoDto)
+      .where(eq(todoTable.id, id))
+      .returning();
+    return todo;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} todo`;
+  async remove(id: string) {
+    await this.db.delete(todoTable).where(eq(todoTable.id, id));
+    return { id };
   }
 }
