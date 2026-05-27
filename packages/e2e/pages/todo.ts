@@ -11,7 +11,7 @@ export class TodoPage {
   }
 
   async goto() {
-    await this.page.goto("http://localhost:3000/");
+    await this.page.goto("/");
   }
 
   async addToDo(text: string, { timeout = 1000 } = {}) {

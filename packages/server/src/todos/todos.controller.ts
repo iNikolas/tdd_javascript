@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
-import type { CreateTodoDto, UpdateTodoDto } from 'shared/dto';
+import type { CreateTodoDto, UpdateTodoDto } from 'shared/entities';
 
 @Controller('todos')
 export class TodosController {
@@ -26,16 +26,16 @@ export class TodosController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.todosService.findOne(+id);
+    return this.todosService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todosService.update(+id, updateTodoDto);
+    return this.todosService.update(id, updateTodoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.todosService.remove(+id);
+    return this.todosService.remove(id);
   }
 }

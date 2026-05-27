@@ -1,8 +1,11 @@
 import { expect, suite, test } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
-import { fetchWithError, extractErrorMessage } from "shared/utils";
+import { fetchWithError, extractErrorMessage, getEnv } from "shared/utils";
 
 import Page from "../app/page";
+import { apiUrl } from "@/config";
+
+const clientUrl = getEnv("CLIENT_URL", "http://localhost:3000");
 
 test("Application must have correct title", () => {
   render(<Page />);
@@ -14,7 +17,7 @@ test("Application must have correct title", () => {
 });
 
 suite("Application must have correct HTML content", async () => {
-  const result = await fetch("http://localhost:3000", {
+  const result = await fetch(clientUrl, {
     method: "GET",
     headers: { "Content-Type": "text/html" },
   });
@@ -53,7 +56,7 @@ test("Can save a POST request", async () => {
   const text = "New Item Test";
 
   try {
-    const response = await fetchWithError("http://localhost:3001/todos", {
+    const response = await fetchWithError(`${apiUrl}/todos`, {
       method: "POST",
       body: JSON.stringify({ newTodo: text }),
     });

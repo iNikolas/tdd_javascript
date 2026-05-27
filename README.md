@@ -1,15 +1,21 @@
 ## Required environment variables
 
-**Place to `shared/.env`**
+**Place to `packages/shared/.env`**
 
 ```
 DATABASE_URL=postgresql://postgres:1111@localhost:5432 // Postgresql DB URL
 ```
 
-**Place to `server/.env`**
+**Place to `packages/server/.env`**
 
 ```
-PORT=3001 // To eliminate port conflict between client and server instances, currently this port is hardcoded in some test suits, so don't change it mindlessly
+PORT=3001
+```
+
+**Place to `packages/client.env`**
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
 
 ## How to run the project locally

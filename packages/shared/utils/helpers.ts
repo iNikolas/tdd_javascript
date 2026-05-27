@@ -2,6 +2,25 @@ interface FetchWithErrorOptions extends RequestInit {
   timeout?: number;
 }
 
+export function getEnv<T extends string>(
+  key: T,
+  fallback: string | null = null,
+): string {
+  const value = process.env[key];
+
+  if (!value) {
+    if (fallback != null) {
+      console.warn(
+        `⚠️ Missing env variable: ${key}, using fallback: ${fallback}`,
+      );
+      return fallback;
+    }
+    throw new Error(`🚨 Missing required environment variable: ${key}`);
+  }
+
+  return value;
+}
+
 async function safeJsonParse<T>(response: Response): Promise<T> {
   const contentType = response.headers.get("content-type");
   const isJson = contentType?.includes("application/json");
