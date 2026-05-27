@@ -7,7 +7,11 @@
   ],
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "npm run build:shared",
+    "dev:server": "npm run start:dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "build:shared": "npm run build --workspace=shared",
+    "db:push": "npm run db:push --workspace=server"
   },
   "keywords": [],
   "author": "Mykola Lebid",

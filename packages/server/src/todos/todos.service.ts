@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import type { DB } from 'src/db';
+import type { DB } from 'shared/db';
 import { InjectDb } from 'src/db/db.provider';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Injectable()
 export class TodosService {
@@ -19,7 +20,7 @@ export class TodosService {
     return `This action returns a #${id} todo`;
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
+  update(id: number, _updateTodoDto: UpdateTodoDto) {
     return `This action updates a #${id} todo`;
   }
 

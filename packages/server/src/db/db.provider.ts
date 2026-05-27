@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 
-import db from './client';
-import { provide } from './constants';
+import db from 'shared/db';
+import { provide } from 'shared/db';
 
 export const InjectDb = () => Inject(provide);
 
