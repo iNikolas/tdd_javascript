@@ -14,7 +14,7 @@ export function TodosList({ ...props }: TableProps) {
       aria-label="to-do list"
       heads={[
         { key: "number", children: "#" },
-        { key: "text", children: "Text" },
+        { key: "text", children: "Text", className: "w-full" },
       ]}
       {...props}
     >

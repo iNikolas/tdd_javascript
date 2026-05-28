@@ -4,7 +4,14 @@ import { TodosList } from "./_components";
 export default function Home() {
   return (
     <main className="p-4 w-full max-w-3xl mx-auto">
-      <h2 className="prose">Your To-Do List</h2>
+      <div className="prose mb-4">
+        <h2>Your To-Do List</h2>
+        <p>
+          Manage your tasks and stay organized with your personalized to-do
+          list. Add new items, mark them as complete, and keep track of your
+          progress all in one place.
+        </p>
+      </div>
       <form aria-label="to-do form">
         <Input
           type="text"
