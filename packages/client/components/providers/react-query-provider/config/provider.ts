@@ -1,5 +1,17 @@
-import { QueryCache, QueryClient } from "@tanstack/react-query";
+import React from "react";
+import { QueryClient } from "@tanstack/react-query";
 
-export const queryClient = new QueryClient({
-  queryCache: new QueryCache(),
-});
+export function useQueryClient() {
+  const [queryClient] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: Infinity,
+          },
+        },
+      }),
+  );
+
+  return queryClient;
+}

@@ -3,14 +3,15 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import type { QueryClientProviderProps } from "@tanstack/react-query";
 
-import { queryClient } from "./config";
+import { useQueryClient } from "./config";
 
 export function ReactQueryProvider({
   children,
   ...props
 }: Partial<QueryClientProviderProps>) {
+  const client = useQueryClient();
   return (
-    <QueryClientProvider client={queryClient} {...props}>
+    <QueryClientProvider client={client} {...props}>
       {children}
     </QueryClientProvider>
   );

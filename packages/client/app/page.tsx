@@ -1,5 +1,8 @@
+import { Suspense } from "react";
+
 import { Input } from "@/components/ui/input";
-import { TodosList } from "./_components";
+
+import { TodosList, TodosListHead, TodosListSkeleton } from "./_components";
 
 export default function Home() {
   return (
@@ -20,7 +23,11 @@ export default function Home() {
           placeholder="Enter a to-do item"
         />
       </form>
-      <TodosList />
+      <TodosListHead>
+        <Suspense fallback={<TodosListSkeleton />}>
+          <TodosList />
+        </Suspense>
+      </TodosListHead>
     </main>
   );
 }

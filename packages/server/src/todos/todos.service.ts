@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { todoTable, type DB, eq } from 'shared/db';
 import { InjectDb } from '../db/db.provider';
-import type {
+import {
   CreateTodoDto,
   UpdateTodoDto,
   CreateTodoResponse,
