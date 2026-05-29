@@ -22,10 +22,7 @@
   },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
-    "db:push": "npx drizzle-kit push",
-    "db:generate": "npx drizzle-kit generate",
-    "db:migrate": "npx drizzle-kit migrate"
+    "dev": "tsup --watch"
   },
   "keywords": [],
   "author": "",
@@ -33,7 +30,6 @@
   "devDependencies": {
     "@types/node": "^24.12.4",
     "@types/pg": "^8.20.0",
-    "drizzle-kit": "^0.31.10",
     "tsup": "^8.5.1",
     "tsx": "^4.22.3",
     "typescript": "^5.9.3"
@@ -42,7 +38,6 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "dotenv": "^17.4.1",
-    "drizzle-orm": "^0.45.2",
-    "pg": "^8.21.0"
+    "drizzle-orm": "^0.45.2"
   }
 }

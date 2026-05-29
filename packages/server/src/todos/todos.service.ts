@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { todoTable, type DB, eq } from 'shared/db';
+import { todoTable } from 'shared/db';
+import { eq } from "drizzle-orm";
 import { InjectDb } from '../db/db.provider';
 import {
   CreateTodoDto,
@@ -7,10 +8,11 @@ import {
   CreateTodoResponse,
   TodosResponse,
 } from 'shared/entities';
+import type { DB } from 'src/db/client';
 
 @Injectable()
 export class TodosService {
-  constructor(@InjectDb() private readonly db: DB) {}
+  constructor(@InjectDb() private readonly db: DB) { }
 
   async create(createTodoDto: CreateTodoDto): Promise<CreateTodoResponse> {
     const [todo] = await this.db

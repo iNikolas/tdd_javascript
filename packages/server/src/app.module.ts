@@ -5,8 +5,8 @@ import { DbModule } from './db/db.module';
 import { TodosModule } from './todos/todos.module';
 
 @Module({
-  imports: [TodosModule, ConfigModule.forRoot(), DbModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), TodosModule, DbModule],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

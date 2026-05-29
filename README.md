@@ -1,16 +1,11 @@
 ## Required environment variables
 
-**Place to `packages/shared/.env`**
-
-```
-DATABASE_URL=postgresql://postgres:1111@localhost:5432 // Postgresql DB URL
-```
-
 **Place to `packages/server/.env`**
 
 ```
 PORT=3001 // For local development to eliminate port usage conflict with client
 CLIENT_URL=http://localhost:3000 // Required explicitly for CORS protection
+DATABASE_URL=postgresql://postgres:1111@localhost:5432 // Postgresql DB URL
 ```
 
 **Place to `packages/client.env`**

@@ -9,7 +9,4 @@ export default defineConfig({
   format: ["cjs", "esm"],
   dts: true,
   clean: true,
-  define: {
-    "process.env.DATABASE_URL": JSON.stringify(process.env.DATABASE_URL),
-  },
 });

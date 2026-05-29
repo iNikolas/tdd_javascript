@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
 
-import { dbUrl } from "./db";
+import { dbUrl } from "src/db/constants";
 
 export default defineConfig({
   out: "./drizzle",

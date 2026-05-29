@@ -1,8 +1,9 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 
+import { todoTable } from "shared/db";
+
 import { dbUrl } from "./constants";
-import { todoTable } from "./schema";
 
 const db = drizzle(dbUrl, { schema: { todoTable } });
 
