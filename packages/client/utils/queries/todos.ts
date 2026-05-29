@@ -9,11 +9,15 @@ import type { TodosResponse } from "shared/entities";
 
 import { env } from "@/config";
 
+export const todosQueryKeys = {
+  all: ["todos"] as const,
+};
+
 function getTodosQueryOptions(
   options: Partial<DefinedInitialDataOptions<TodosResponse["todos"]>> = {},
 ) {
   return queryOptions({
-    queryKey: ["todos"],
+    queryKey: todosQueryKeys.all,
     queryFn: async () => {
       const response = await fetchWithError<TodosResponse>(
         `${env.apiUrl}/todos`,

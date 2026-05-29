@@ -1,8 +1,11 @@
 import { Suspense } from "react";
 
-import { Input } from "@/components/ui/input";
-
-import { TodosList, TodosListHead, TodosListSkeleton } from "./_components";
+import {
+  CreateTodoInput,
+  TodosList,
+  TodosListHead,
+  TodosListSkeleton,
+} from "./_components";
 
 export default function Home() {
   return (
@@ -15,14 +18,7 @@ export default function Home() {
           progress all in one place.
         </p>
       </div>
-      <form aria-label="to-do form">
-        <Input
-          type="text"
-          id="new-todo"
-          name="new-todo"
-          placeholder="Enter a to-do item"
-        />
-      </form>
+      <CreateTodoInput />
       <TodosListHead>
         <Suspense fallback={<TodosListSkeleton />}>
           <TodosList />
