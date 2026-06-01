@@ -27,12 +27,12 @@ export class TodoPage {
     return this.todoItems.getByRole("row");
   }
 
-  checkForRow(text: string) {
+  async checkForRow(text: string) {
     const row = this.todoItems.getByRole("row", {
       name: new RegExp(`${text}`, "gi"),
     });
 
-    expect(row, `"${text}" to-do item didn't appear`).toBeVisible();
+    await expect(row, `"${text}" to-do item didn't appear`).toBeVisible();
   }
 
   async remove(text: string) {

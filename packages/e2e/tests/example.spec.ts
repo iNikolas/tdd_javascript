@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { v4 as uuidv4 } from "uuid"
+import { v4 as uuidv4 } from "uuid";
 
 import { test } from "../fixtures/pages";
 
@@ -27,7 +27,7 @@ test.describe("Can start a to-do list", () => {
 
     await test.step(`User Types "${text}" into a text box`, async () => {
       await todoPage.addToDo(text);
-      todoPage.checkForRow(text);
+      await todoPage.checkForRow(text);
     });
 
     const secondText = uuidv4();
@@ -35,8 +35,8 @@ test.describe("Can start a to-do list", () => {
     await test.step(`There is still a textbox inviting User to Add another Item. User enters "${secondText}"`, async () => {
       await todoPage.addToDo(secondText);
 
-      todoPage.checkForRow(text);
-      todoPage.checkForRow(secondText);
+      await todoPage.checkForRow(text);
+      await todoPage.checkForRow(secondText);
     });
   });
 });
