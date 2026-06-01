@@ -9,6 +9,7 @@
   "scripts": {
     "postinstall": "npm run build:shared",
     "dev:server": "npm run start:dev --workspace=server",
+    "e2e:server": "npm run start:e2e --workspace=server",
     "dev:client": "npm run dev --workspace=client",
     "test:client": "npm run test --workspace=client",
     "test:server": "npm run test --workspace=server",

@@ -4,14 +4,14 @@ import { render, screen, cleanup } from "@testing-library/react";
 import { CreateTodoResponse, TodosResponse } from "shared/entities";
 import { fetchWithError, extractErrorMessage, getEnv } from "shared/utils";
 
-import { env } from "@/config";
 import { getTodos } from "@/apis";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TodosListClientView } from "@/app/_components/todos-list/components";
 
 import Page from "../app/page";
 
-const clientUrl = getEnv("CLIENT_URL", "http://localhost:3000");
+const clientUrl = getEnv("TEST_CLIENT_URL");
+const apiUrl = getEnv("TEST_API_URL");
 
 const createTestQueryClient = () =>
   new QueryClient({
@@ -98,12 +98,12 @@ test("Can save a POST request", async () => {
   const text = "New Item Test";
 
   const { todos: previous } = await fetchWithError<TodosResponse>(
-    `${env.apiUrl}/todos`,
+    `${apiUrl}/todos`,
   );
 
   try {
     const response = await fetchWithError<CreateTodoResponse>(
-      `${env.apiUrl}/todos`,
+      `${apiUrl}/todos`,
       {
         method: "POST",
         body: JSON.stringify({ text }),
@@ -111,7 +111,7 @@ test("Can save a POST request", async () => {
     );
 
     const { todos: next } = await fetchWithError<TodosResponse>(
-      `${env.apiUrl}/todos`,
+      `${apiUrl}/todos`,
     );
 
     expect(next.length, "New todo must be added to the list").toBe(
@@ -134,12 +134,12 @@ test("Can save multiple items", async () => {
   const items = ["Item 1", "Item 2", "Item 3"];
 
   const { todos: previous } = await fetchWithError<TodosResponse>(
-    `${env.apiUrl}/todos`,
+    `${apiUrl}/todos`,
   );
 
   await Promise.all(
     items.map((text) =>
-      fetchWithError<CreateTodoResponse>(`${env.apiUrl}/todos`, {
+      fetchWithError<CreateTodoResponse>(`${apiUrl}/todos`, {
         method: "POST",
         body: JSON.stringify({ text }),
       }),
@@ -147,7 +147,7 @@ test("Can save multiple items", async () => {
   );
 
   const { todos: next } = await fetchWithError<TodosResponse>(
-    `${env.apiUrl}/todos`,
+    `${apiUrl}/todos`,
   );
 
   expect(next.length, "New todo must be added to the list").toBe(
@@ -164,7 +164,7 @@ test("Can save multiple items", async () => {
 
 test("Cannot save an empty item", async () => {
   try {
-    await fetchWithError<CreateTodoResponse>(`${env.apiUrl}/todos`, {
+    await fetchWithError<CreateTodoResponse>(`${apiUrl}/todos`, {
       method: "POST",
       body: JSON.stringify({ text: "" }),
     });
@@ -185,7 +185,7 @@ test("Display all list items straight away", async () => {
 
   await Promise.all(
     items.map((text) =>
-      fetchWithError<CreateTodoResponse>(`${env.apiUrl}/todos`, {
+      fetchWithError<CreateTodoResponse>(`${apiUrl}/todos`, {
         method: "POST",
         body: JSON.stringify({ text }),
       }),

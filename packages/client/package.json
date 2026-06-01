@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:e2e": "cross-env NEXT_PUBLIC_API_URL=http://localhost:8001 next dev -p 8000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -30,6 +31,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.0.1",
+    "cross-env": "^10.1.0",
     "daisyui": "^5.5.19",
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
