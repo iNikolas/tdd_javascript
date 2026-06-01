@@ -4,3 +4,7 @@ export const todoTable = pgTable("todo", {
   id: uuid().primaryKey().defaultRandom(),
   text: varchar().notNull(),
 });
+
+export const dbSchema = {
+  todoTable,
+} as const;

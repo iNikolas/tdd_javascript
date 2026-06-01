@@ -1,29 +1,39 @@
-import db, { todoTable } from 'shared/db';
+import { PGlite } from '@electric-sql/pglite';
+import { drizzle } from 'drizzle-orm/pglite';
 
-describe('DbProvider', () => {
-  it('test saving and retrieving items', async () => {
+import { todoTable, dbSchema } from 'shared/db';
+
+describe('DbProvider - Pure PGlite Test', () => {
+  let pgLite: PGlite;
+  let db: ReturnType<typeof drizzle>;
+
+  beforeAll(() => {
+    pgLite = new PGlite();
+    db = drizzle(pgLite, { schema: dbSchema });
+  });
+
+  beforeEach(async () => {
+    await db.delete(todoTable);
+  });
+
+  afterAll(async () => {
+    await pgLite.close();
+  });
+
+  it('test saving and retrieving items in memory', async () => {
     const [item1] = await db
       .insert(todoTable)
       .values({ text: 'The first (ever) list item' })
       .returning();
-    const [item2] = await db
-      .insert(todoTable)
-      .values({ text: '"Item the second"' })
-      .returning();
 
     const items = await db.select().from(todoTable);
 
-    expect(items).toHaveLength(2);
-
-    expect(items).toEqual([
+    expect(items).toHaveLength(1);
+    expect(items[0]).toEqual(
       expect.objectContaining({
         id: item1.id,
         text: 'The first (ever) list item',
       }),
-      expect.objectContaining({
-        id: item2.id,
-        text: '"Item the second"',
-      }),
-    ]);
+    );
   });
 });

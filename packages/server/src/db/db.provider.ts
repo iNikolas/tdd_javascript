@@ -1,12 +1,21 @@
-import { Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Inject, type Provider } from '@nestjs/common';
 
-import db from 'shared/db';
+import { dbSchema } from 'shared/db';
 
-import { provide } from './constants';
+export const InjectDb = () => Inject('DbProvider');
 
-export const InjectDb = () => Inject(provide);
+export const dbProvider: Provider = {
+  provide: 'DbProvider',
+  useFactory: (configService: ConfigService) => {
+    const dbUrl = configService.get<string>('DATABASE_URL');
 
-export const dbProvider = {
-  provide,
-  useValue: db,
+    if (!dbUrl) {
+      throw new Error('Missing DATABASE_URL environment variable');
+    }
+
+    return drizzle(dbUrl, { schema: dbSchema });
+  },
+  inject: [ConfigService],
 };
