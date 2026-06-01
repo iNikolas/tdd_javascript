@@ -13,6 +13,7 @@
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@types/node": "^24.12.4",
-    "shared": "file:../shared"
+    "shared": "file:../shared",
+    "uuid": "^14.0.0"
   }
 }

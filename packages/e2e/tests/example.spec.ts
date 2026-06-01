@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test";
+import { v4 as uuidv4 } from "uuid"
 
 import { test } from "../fixtures/pages";
 
@@ -22,14 +23,14 @@ test.describe("Can start a to-do list", () => {
       "Enter a to-do item",
     );
 
-    const text = "Buy Peacock feathers";
+    const text = uuidv4();
 
     await test.step(`User Types "${text}" into a text box`, async () => {
       await todoPage.addToDo(text);
       todoPage.checkForRow(text);
     });
 
-    const secondText = "Use peacock feathers to make a fly";
+    const secondText = uuidv4();
 
     await test.step(`There is still a textbox inviting User to Add another Item. User enters "${secondText}"`, async () => {
       await todoPage.addToDo(secondText);

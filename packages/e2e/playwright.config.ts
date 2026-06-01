@@ -10,7 +10,7 @@ import dotenv from "dotenv";
 import path from "path";
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
-const baseURL = getEnv("BASE_URL", "http://localhost:3000");
+const baseURL = getEnv("BASE_URL", "http://localhost:8000");
 
 /**
  * See https://playwright.dev/docs/test-configuration.

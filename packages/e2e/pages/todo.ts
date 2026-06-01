@@ -14,11 +14,9 @@ export class TodoPage {
     await this.page.goto("/");
   }
 
-  async addToDo(text: string, { timeout = 1000 } = {}) {
+  async addToDo(text: string) {
     await this.inputBox.fill(text);
     await this.inputBox.press("Enter");
-
-    this.page.waitForTimeout(timeout);
   }
 
   getTodoInputBox() {
@@ -41,12 +39,5 @@ export class TodoPage {
     const todo = this.todoItems.filter({ hasText: text });
     await todo.hover();
     await todo.getByLabel("Delete").click();
-  }
-
-  async removeAll() {
-    while ((await this.todoItems.count()) > 0) {
-      await this.todoItems.first().hover();
-      await this.todoItems.getByLabel("Delete").first().click();
-    }
   }
 }

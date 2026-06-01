@@ -12,7 +12,5 @@ export const test = base.extend<Fixtures>({
     await todoPage.goto();
 
     await use(todoPage);
-
-    await todoPage.removeAll();
   },
 });

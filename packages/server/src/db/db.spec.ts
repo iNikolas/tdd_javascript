@@ -1,23 +1,17 @@
-import { PGlite } from '@electric-sql/pglite';
 import { drizzle } from 'drizzle-orm/pglite';
 
-import { todoTable, dbSchema } from 'shared/db';
+import { todoTable } from 'shared/db';
+import { initLiteDatabase } from './db.utils';
 
 describe('DbProvider - Pure PGlite Test', () => {
-  let pgLite: PGlite;
   let db: ReturnType<typeof drizzle>;
 
-  beforeAll(() => {
-    pgLite = new PGlite();
-    db = drizzle(pgLite, { schema: dbSchema });
+  beforeAll(async () => {
+    db = await initLiteDatabase();
   });
 
   beforeEach(async () => {
     await db.delete(todoTable);
-  });
-
-  afterAll(async () => {
-    await pgLite.close();
   });
 
   it('test saving and retrieving items in memory', async () => {
