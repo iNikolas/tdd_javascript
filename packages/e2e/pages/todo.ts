@@ -1,4 +1,5 @@
-import { expect } from "@playwright/test";
+import { v4 as uuidv4 } from "uuid";
+import { expect, test } from "@playwright/test";
 import type { Page, Locator } from "@playwright/test";
 
 export class TodoPage {
@@ -14,9 +15,24 @@ export class TodoPage {
     await this.page.goto("/");
   }
 
+  async waitForPageLoad() {
+    await expect(this.getTodoInputBox()).toBeVisible();
+    await expect(this.getTodoInputBox()).toHaveAttribute(
+      "placeholder",
+      "Enter a to-do item",
+    );
+  }
+
   async addToDo(text: string) {
     await this.inputBox.fill(text);
     await this.inputBox.press("Enter");
+  }
+
+  async testAddToDo(text = uuidv4()) {
+    await test.step(`User Types "${text}" into a text box`, async () => {
+      await this.addToDo(text);
+      await this.checkForRow(text);
+    });
   }
 
   getTodoInputBox() {
@@ -27,10 +43,14 @@ export class TodoPage {
     return this.todoItems.getByRole("row");
   }
 
-  async checkForRow(text: string) {
-    const row = this.todoItems.getByRole("row", {
+  getRowByText(text: string) {
+    return this.todoItems.getByRole("row", {
       name: new RegExp(`${text}`, "gi"),
     });
+  }
+
+  async checkForRow(text: string) {
+    const row = this.getRowByText(text);
 
     await expect(row, `"${text}" to-do item didn't appear`).toBeVisible();
   }
