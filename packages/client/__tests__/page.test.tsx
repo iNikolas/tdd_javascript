@@ -4,11 +4,12 @@ import { render, screen, cleanup } from "@testing-library/react";
 import { CreateTodoResponse, TodosResponse } from "shared/entities";
 import { fetchWithError, extractErrorMessage, getEnv } from "shared/utils";
 
-import { getTodos } from "@/apis";
+import { createTodo, getTodos } from "@/apis";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TodosListClientView } from "@/app/_components/todos-list/components";
 
 import Page from "../app/page";
+import { TodosListClientView } from "@/components/containers/todos/components/todos-list/components";
+import { CreateTodoInput } from "@/components/containers/todos/components";
 
 const clientUrl = getEnv("TEST_CLIENT_URL");
 const apiUrl = getEnv("TEST_API_URL");
@@ -65,7 +66,7 @@ suite("Application must have correct HTML content", async () => {
 test("Renders input form", () => {
   render(
     <QueryClientProvider client={createTestQueryClient()}>
-      <Page />
+      <CreateTodoInput />
     </QueryClientProvider>,
   );
 
@@ -164,10 +165,7 @@ test("Can save multiple items", async () => {
 
 test("Cannot save an empty item", async () => {
   try {
-    await fetchWithError<CreateTodoResponse>(`${apiUrl}/todos`, {
-      method: "POST",
-      body: JSON.stringify({ text: "" }),
-    });
+    await createTodo({ text: "" });
   } catch (error) {
     expect(
       error,
@@ -183,16 +181,11 @@ test("Display all list items straight away", async () => {
     `Random List Item ${uuid4()}`,
   ];
 
-  await Promise.all(
-    items.map((text) =>
-      fetchWithError<CreateTodoResponse>(`${apiUrl}/todos`, {
-        method: "POST",
-        body: JSON.stringify({ text }),
-      }),
-    ),
+  const [response] = await Promise.all(
+    items.map((text) => createTodo({ text })),
   );
 
-  const initialData = await getTodos();
+  const initialData = await getTodos(response.userId);
 
   render(
     <QueryClientProvider client={createTestQueryClient()}>

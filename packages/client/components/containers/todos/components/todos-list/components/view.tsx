@@ -7,10 +7,13 @@ import { TodosListSkeleton } from "../../todos-list-skeleton";
 
 export function TodosListClientView({
   initialData,
+  listId,
 }: {
   initialData: TodosResponse["todos"];
+  listId?: string;
 }) {
-  const { data, isLoading, error } = useTodosQuery({ initialData });
+  console.log("TodosListClientView rendered with listId:", listId);
+  const { data, isLoading, error } = useTodosQuery({ initialData, listId });
 
   useErrorToast(error);
   return (

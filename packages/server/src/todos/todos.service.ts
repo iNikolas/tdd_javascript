@@ -7,6 +7,7 @@ import {
   UpdateTodoDto,
   CreateTodoResponse,
   TodosResponse,
+  Todo,
 } from 'shared/entities';
 import type { DB } from 'src/db/db.type';
 
@@ -19,7 +20,7 @@ export class TodosService {
       .insert(todoTable)
       .values(createTodoDto)
       .returning();
-    return todo;
+    return { data: todo, userId: '1' };
   }
 
   async findAll(): Promise<TodosResponse> {
@@ -27,7 +28,7 @@ export class TodosService {
     return { todos };
   }
 
-  async findOne(id: string): Promise<CreateTodoResponse> {
+  async findOne(id: string): Promise<Todo> {
     const todo = await this.db
       .select()
       .from(todoTable)
@@ -36,10 +37,7 @@ export class TodosService {
     return todo[0];
   }
 
-  async update(
-    id: string,
-    updateTodoDto: UpdateTodoDto,
-  ): Promise<CreateTodoResponse> {
+  async update(id: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
     const [todo] = await this.db
       .update(todoTable)
       .set(updateTodoDto)

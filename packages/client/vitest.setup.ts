@@ -1,6 +1,14 @@
-import { loadEnvConfig } from "@next/env";
+import { vi } from "vitest";
 
-export default async () => {
-  const projectDir = process.cwd();
-  loadEnvConfig(projectDir);
-};
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+  })),
+  usePathname: vi.fn(() => "/"),
+  useSearchParams: vi.fn(() => new URLSearchParams()),
+}));

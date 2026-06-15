@@ -1,35 +1,30 @@
-import {
-  DefinedInitialDataOptions,
-  queryOptions,
-  useQuery,
-} from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 
-import { fetchWithError } from "shared/utils";
-import type { TodosResponse } from "shared/entities";
+import { getTodos } from "@/apis";
 
-import { env } from "@/config";
+import type { TodosQueryOptions } from "./types";
 
 export const todosQueryKeys = {
-  all: ["todos"] as const,
+  all: (id?: string) => ["todos", id],
 };
 
-function getTodosQueryOptions(
-  options: Partial<DefinedInitialDataOptions<TodosResponse["todos"]>> = {},
-) {
+function getTodosQueryOptions(options: TodosQueryOptions = {}) {
+  const { listId, ...otherOptions } = options;
   return queryOptions({
-    queryKey: todosQueryKeys.all,
+    queryKey: todosQueryKeys.all(listId),
     queryFn: async () => {
-      const response = await fetchWithError<TodosResponse>(
-        `${env.apiUrl}/todos`,
-      );
-      return response.todos;
+      if (!listId) {
+        throw new Error("List ID is required to fetch todos.");
+      }
+
+      const response = await getTodos(listId);
+      return response;
     },
-    ...options,
+    enabled: !!listId,
+    ...otherOptions,
   });
 }
 
-export function useTodosQuery(
-  options: Partial<DefinedInitialDataOptions<TodosResponse["todos"]>> = {},
-) {
+export function useTodosQuery(options: TodosQueryOptions = {}) {
   return useQuery(getTodosQueryOptions(options));
 }

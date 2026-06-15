@@ -28,7 +28,7 @@ test("user invited to enter a to-do item straight away", async ({
 
   await todoPage.testAddToDo(secondText);
 
-  test.step(`User sees both "${text}" and "${secondText}" in the list`, async () => {
+  await test.step(`User sees both "${text}" and "${secondText}" in the list`, async () => {
     await todoPage.checkForRow(text);
     await todoPage.checkForRow(secondText);
   });
@@ -45,39 +45,43 @@ test("Multiple users can start lists at different urls", async ({
 
     await todoPage.testAddToDo(firstText);
 
-    test.step("Second user notices that his list has a unique URL", async () => {
+    await test.step("Second user notices that his list has a unique URL", async () => {
       const userUrl = todoPage.page.url();
-      expect(userUrl).toMatch(/\/lists\/.+/gi);
+
+      await expect(todoPage.page).toHaveURL(/\/lists\/.+/gi);
+
       urls.secondUser = userUrl;
     });
   });
 
   await test.step("Now a new Third user, comes along to the site", async () => {
-    test.step("We delete all the browser's cookies as a way of simulating a brand new user session", async () => {
+    await test.step("We delete all the browser's cookies as a way of simulating a brand new user session", async () => {
       await todoPage.page.context().clearCookies();
     });
 
-    test.step("Third visits the home page. There is no sign of the previous user's list", async () => {
+    await test.step("Third user visits the home page. There is no sign of the previous user's list", async () => {
       await todoPage.goto();
       await todoPage.waitForPageLoad();
-      await expect(todoPage.getTodoItems()).toBeEmpty();
+      await expect(todoPage.getTodoItems()).toHaveCount(0);
     });
 
     const secondText = uuidv4();
 
-    test.step("Francis starts a new list by entering a new item", async () => {
+    await test.step("Third user starts a new list by entering a new item", async () => {
       await todoPage.testAddToDo(secondText);
     });
 
-    test.step("Third user gets his own unique URL", async () => {
+    await test.step("Third user gets his own unique URL", async () => {
       const userUrl = todoPage.page.url();
-      expect(userUrl).toMatch(/\/lists\/.+/gi);
+
+      await expect(todoPage.page).toHaveURL(/\/lists\/.+/gi);
+
       urls.thirdUser = userUrl;
       expect(userUrl).not.toBe(todoPage.page.url());
       expect(userUrl).not.toBe(urls.secondUser);
     });
 
-    test.step("Again, there is no trace of the second user's list", async () => {
+    await test.step("Again, there is no trace of the second user's list", async () => {
       const secondUsersTodoItemRow = todoPage.getRowByText(firstText);
       await expect(secondUsersTodoItemRow).toBeHidden();
 

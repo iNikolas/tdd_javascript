@@ -1,18 +1,15 @@
 import { fetchWithError } from "shared/utils";
-import type {
-  CreateTodoDto,
-  CreateTodoResponse,
-  TodosResponse,
-} from "shared/entities";
+import type { CreateTodoResponse, TodosResponse } from "shared/entities";
 
 import { env } from "@/config";
+import { CreateTodoData } from "./types";
 
-export async function getTodos() {
+export async function getTodos(id: string) {
   const response = await fetchWithError<TodosResponse>(`${env.apiUrl}/todos`);
   return response.todos;
 }
 
-export async function createTodo(dto: CreateTodoDto) {
+export async function createTodo({ listId, ...dto }: CreateTodoData) {
   const response = await fetchWithError<CreateTodoResponse>(
     `${env.apiUrl}/todos`,
     {

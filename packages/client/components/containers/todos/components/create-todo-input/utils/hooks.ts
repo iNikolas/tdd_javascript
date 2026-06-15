@@ -1,10 +1,13 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 
 import { useCreateTodoMutation } from "@/utils/mutations/todos";
 
-export function useInputMutationState() {
+export function useInputMutationState(listId?: string) {
+  const router = useRouter();
+
   const [value, setValue] = React.useState("");
-  const { mutate, variables, error } = useCreateTodoMutation();
+  const { mutateAsync, variables, error } = useCreateTodoMutation();
 
   const prevText = variables?.text ?? "";
 
@@ -18,7 +21,11 @@ export function useInputMutationState() {
     value,
     onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
-      mutate({ text: value });
+      mutateAsync({ text: value, listId }).then(({ userId }) => {
+        if (!listId) {
+          router.push(`/lists/${userId}`);
+        }
+      });
       setValue("");
     },
     onChange: (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) =>

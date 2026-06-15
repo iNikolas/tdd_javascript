@@ -40,7 +40,7 @@ export class TodoPage {
   }
 
   getTodoItems() {
-    return this.todoItems.getByRole("row");
+    return this.todoItems.locator("tbody tr");
   }
 
   getRowByText(text: string) {

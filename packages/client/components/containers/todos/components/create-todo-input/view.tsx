@@ -1,16 +1,16 @@
 "use client";
 
-import React from "react";
-
 import { Input } from "@/components/ui/input";
 
+import { CreateTodoInputProps } from "./types";
 import { useInputMutationState } from "./utils";
 
 export function CreateTodoInput({
   className,
+  listId,
   ...props
-}: React.InputHTMLAttributes<HTMLInputElement>) {
-  const { value, onSubmit, onChange } = useInputMutationState();
+}: CreateTodoInputProps) {
+  const { value, onSubmit, onChange } = useInputMutationState(listId);
 
   return (
     <form aria-label="to-do form" className={className} onSubmit={onSubmit}>
