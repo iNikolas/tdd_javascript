@@ -5,17 +5,17 @@ import { drizzle as drizzleLite } from 'drizzle-orm/pglite';
 import { dbSchema } from 'shared/db';
 
 export async function initLiteDatabase() {
-    const pgLite = new PGlite();
+  const pgLite = new PGlite();
 
-    const syncDb = drizzleLite(pgLite);
+  const syncDb = drizzleLite(pgLite);
 
-    const { apply } = await pushSchema(dbSchema, syncDb);
-    await apply();
+  const { apply } = await pushSchema(dbSchema, syncDb);
+  await apply();
 
-    const db = drizzleLite(pgLite, { schema: dbSchema });
+  const db = drizzleLite(pgLite, { schema: dbSchema });
 
-    console.log(
-        '🚀 In-memory PGlite database synchronized successfully (Push Mode)',
-    );
-    return db;
+  console.log(
+    '🚀 In-memory PGlite database synchronized successfully (Push Mode)',
+  );
+  return db;
 }

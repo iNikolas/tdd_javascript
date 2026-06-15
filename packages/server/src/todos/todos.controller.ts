@@ -10,23 +10,23 @@ import {
 import { TodosService } from './todos.service';
 import { CreateTodoDto, UpdateTodoDto } from 'shared/entities';
 
-@Controller('todos')
+@Controller('lists')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
-  @Post()
+  @Post('new')
   create(@Body() createTodoDto: CreateTodoDto) {
     return this.todosService.create(createTodoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.todosService.findAll();
+  @Post(':id/new')
+  createForList(@Body() createTodoDto: CreateTodoDto, @Param('id') id: string) {
+    return this.todosService.create(createTodoDto, id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.todosService.findOne(id);
+  findAll(@Param('id') id: string) {
+    return this.todosService.findAll(id);
   }
 
   @Patch(':id')

@@ -21,9 +21,9 @@ export function useInputMutationState(listId?: string) {
     value,
     onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
-      mutateAsync({ text: value, listId }).then(({ userId }) => {
+      mutateAsync({ text: value, listId }).then(({ listId: newListId }) => {
         if (!listId) {
-          router.push(`/lists/${userId}`);
+          router.push(`/lists/${newListId}`);
         }
       });
       setValue("");

@@ -46,10 +46,9 @@ test("Multiple users can start lists at different urls", async ({
     await todoPage.testAddToDo(firstText);
 
     await test.step("Second user notices that his list has a unique URL", async () => {
-      const userUrl = todoPage.page.url();
-
       await expect(todoPage.page).toHaveURL(/\/lists\/.+/gi);
 
+      const userUrl = todoPage.page.url();
       urls.secondUser = userUrl;
     });
   });
@@ -72,13 +71,15 @@ test("Multiple users can start lists at different urls", async ({
     });
 
     await test.step("Third user gets his own unique URL", async () => {
-      const userUrl = todoPage.page.url();
-
       await expect(todoPage.page).toHaveURL(/\/lists\/.+/gi);
 
+      const userUrl = todoPage.page.url();
+
       urls.thirdUser = userUrl;
-      expect(userUrl).not.toBe(todoPage.page.url());
-      expect(userUrl).not.toBe(urls.secondUser);
+
+      expect(userUrl, "Third user must have a different URL").not.toBe(
+        urls.secondUser,
+      );
     });
 
     await test.step("Again, there is no trace of the second user's list", async () => {

@@ -98,26 +98,12 @@ test("Renders todos table", () => {
 test("Can save a POST request", async () => {
   const text = "New Item Test";
 
-  const { todos: previous } = await fetchWithError<TodosResponse>(
-    `${apiUrl}/todos`,
-  );
-
   try {
-    const response = await fetchWithError<CreateTodoResponse>(
-      `${apiUrl}/todos`,
-      {
-        method: "POST",
-        body: JSON.stringify({ text }),
-      },
-    );
+    const response = await createTodo({ text });
 
-    const { todos: next } = await fetchWithError<TodosResponse>(
-      `${apiUrl}/todos`,
-    );
+    const next = await getTodos(response.listId);
 
-    expect(next.length, "New todo must be added to the list").toBe(
-      previous.length + 1,
-    );
+    expect(next.length, "New todo must be added to the list").toBe(1);
 
     expect(
       JSON.stringify(response),
@@ -134,26 +120,13 @@ test("Can save a POST request", async () => {
 test("Can save multiple items", async () => {
   const items = ["Item 1", "Item 2", "Item 3"];
 
-  const { todos: previous } = await fetchWithError<TodosResponse>(
-    `${apiUrl}/todos`,
-  );
+  const { listId } = await createTodo({ text: items[0] });
 
-  await Promise.all(
-    items.map((text) =>
-      fetchWithError<CreateTodoResponse>(`${apiUrl}/todos`, {
-        method: "POST",
-        body: JSON.stringify({ text }),
-      }),
-    ),
-  );
+  await Promise.all(items.slice(1).map((text) => createTodo({ text, listId })));
 
-  const { todos: next } = await fetchWithError<TodosResponse>(
-    `${apiUrl}/todos`,
-  );
+  const next = await getTodos(listId);
 
-  expect(next.length, "New todo must be added to the list").toBe(
-    previous.length + items.length,
-  );
+  expect(next.length, "New todo must be added to the list").toBe(items.length);
 
   items.forEach((text) => {
     expect(
@@ -181,11 +154,13 @@ test("Display all list items straight away", async () => {
     `Random List Item ${uuid4()}`,
   ];
 
+  const { listId } = await createTodo({ text: items[0] });
+
   const [response] = await Promise.all(
-    items.map((text) => createTodo({ text })),
+    items.slice(1).map((text) => createTodo({ text, listId })),
   );
 
-  const initialData = await getTodos(response.userId);
+  const initialData = await getTodos(response.listId);
 
   render(
     <QueryClientProvider client={createTestQueryClient()}>

@@ -12,7 +12,6 @@ export function TodosListClientView({
   initialData: TodosResponse["todos"];
   listId?: string;
 }) {
-  console.log("TodosListClientView rendered with listId:", listId);
   const { data, isLoading, error } = useTodosQuery({ initialData, listId });
 
   useErrorToast(error);

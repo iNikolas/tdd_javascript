@@ -5,13 +5,15 @@ import { env } from "@/config";
 import { CreateTodoData } from "./types";
 
 export async function getTodos(id: string) {
-  const response = await fetchWithError<TodosResponse>(`${env.apiUrl}/todos`);
+  const response = await fetchWithError<TodosResponse>(
+    `${env.apiUrl}/lists/${id}`,
+  );
   return response.todos;
 }
 
 export async function createTodo({ listId, ...dto }: CreateTodoData) {
   const response = await fetchWithError<CreateTodoResponse>(
-    `${env.apiUrl}/todos`,
+    `${env.apiUrl}/lists${listId ? `/${listId}` : ""}/new`,
     {
       method: "POST",
       body: JSON.stringify(dto),

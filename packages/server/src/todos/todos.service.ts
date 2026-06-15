@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { todoTable } from 'shared/db';
+import { listTable, todoTable } from 'shared/db';
 import { eq } from 'drizzle-orm';
 import { InjectDb } from '../db/db.provider';
 import {
@@ -15,26 +15,34 @@ import type { DB } from 'src/db/db.type';
 export class TodosService {
   constructor(@InjectDb() private readonly db: DB) {}
 
-  async create(createTodoDto: CreateTodoDto): Promise<CreateTodoResponse> {
-    const [todo] = await this.db
+  async create(
+    createTodoDto: CreateTodoDto,
+    listId?: string,
+  ): Promise<CreateTodoResponse> {
+    const getListId = async () => {
+      if (!listId) {
+        const [{ id }] = await this.db.insert(listTable).values({}).returning();
+
+        return id;
+      }
+
+      return listId;
+    };
+
+    const [{ listId: listIdDefined, ...todo }] = await this.db
       .insert(todoTable)
-      .values(createTodoDto)
+      .values({ ...createTodoDto, listId: await getListId() })
       .returning();
-    return { data: todo, userId: '1' };
+
+    return { data: todo, listId: listIdDefined };
   }
 
-  async findAll(): Promise<TodosResponse> {
-    const todos = await this.db.select().from(todoTable);
-    return { todos };
-  }
-
-  async findOne(id: string): Promise<Todo> {
-    const todo = await this.db
-      .select()
+  async findAll(id: string): Promise<TodosResponse> {
+    const todos = await this.db
+      .select({ id: todoTable.id, text: todoTable.text })
       .from(todoTable)
-      .where(eq(todoTable.id, id))
-      .limit(1);
-    return todo[0];
+      .where(eq(todoTable.listId, id));
+    return { todos };
   }
 
   async update(id: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
