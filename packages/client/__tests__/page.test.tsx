@@ -1,18 +1,17 @@
 import { v4 as uuid4 } from "uuid";
 import { expect, suite, test } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
-import { CreateTodoResponse, TodosResponse } from "shared/entities";
-import { fetchWithError, extractErrorMessage, getEnv } from "shared/utils";
-
-import { createTodo, getTodos } from "@/apis";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import Page from "../app/page";
-import { TodosListClientView } from "@/components/containers/todos/components/todos-list/components";
+import { extractErrorMessage, getEnv } from "shared/utils";
+
+import { createTodo, getTodos } from "@/apis";
 import { CreateTodoInput } from "@/components/containers/todos/components";
+import { TodosListClientView } from "@/components/containers/todos/components/todos-list/components";
+
+import Page from "../app/page";
 
 const clientUrl = getEnv("TEST_CLIENT_URL");
-const apiUrl = getEnv("TEST_API_URL");
 
 const createTestQueryClient = () =>
   new QueryClient({
@@ -176,4 +175,37 @@ test("Display all list items straight away", async () => {
   });
 
   cleanup();
+});
+
+test("Displays only items for that list", async () => {
+  const items = [uuid4(), uuid4(), uuid4(), uuid4()];
+  const otherItems = [uuid4(), uuid4()];
+
+  const { listId } = await createTodo({ text: items[0] });
+
+  await Promise.all([
+    ...items.slice(1).map((text) => createTodo({ text, listId })),
+    ...otherItems.map((text) => createTodo({ text })),
+  ]);
+
+  const initialData = await getTodos(listId);
+
+  expect(
+    initialData.length,
+    `Initial data must contain ${items.length} items`,
+  ).toBe(items.length);
+
+  items.forEach((text) => {
+    expect(
+      initialData.find((item) => item.text === text),
+      `Successful response must contain "${text}" and to be serialized`,
+    ).toBeDefined();
+  });
+
+  otherItems.forEach((text) => {
+    expect(
+      initialData.find((item) => item.text === text),
+      `Successful response must not contain "${text}" and to be serialized`,
+    ).toBeUndefined();
+  });
 });

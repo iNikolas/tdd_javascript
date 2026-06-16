@@ -13,7 +13,7 @@ export async function getTodos(id: string) {
 
 export async function createTodo({ listId, ...dto }: CreateTodoData) {
   const response = await fetchWithError<CreateTodoResponse>(
-    `${env.apiUrl}/lists${listId ? `/${listId}` : ""}/new`,
+    `${env.apiUrl}/lists${listId ? `/${listId}` : ""}/${listId ? "add_item" : "new"}`,
     {
       method: "POST",
       body: JSON.stringify(dto),

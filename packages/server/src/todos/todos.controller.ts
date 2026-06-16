@@ -19,7 +19,7 @@ export class TodosController {
     return this.todosService.create(createTodoDto);
   }
 
-  @Post(':id/new')
+  @Post(':id/add_item')
   createForList(@Body() createTodoDto: CreateTodoDto, @Param('id') id: string) {
     return this.todosService.create(createTodoDto, id);
   }
