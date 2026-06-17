@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 
 import { CreateTodoInputProps } from "./types";
 import { useInputMutationState } from "./utils";
+import { cn } from "@/utils";
 
 export function CreateTodoInput({
   className,
@@ -13,7 +14,11 @@ export function CreateTodoInput({
   const { value, onSubmit, onChange } = useInputMutationState(listId);
 
   return (
-    <form aria-label="to-do form" className={className} onSubmit={onSubmit}>
+    <form
+      aria-label="to-do form"
+      className={cn(className, "flex justify-center mb-4")}
+      onSubmit={onSubmit}
+    >
       <Input
         value={value}
         onChange={onChange}

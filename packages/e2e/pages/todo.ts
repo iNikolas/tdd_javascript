@@ -55,6 +55,16 @@ export class TodoPage {
     await expect(row, `"${text}" to-do item didn't appear`).toBeVisible();
   }
 
+  async getInputBoundingBox() {
+    const box = await this.getTodoInputBox().boundingBox();
+
+    if (!box) {
+      throw new Error("Input box not found");
+    }
+
+    return box;
+  }
+
   async remove(text: string) {
     const todo = this.todoItems.filter({ hasText: text });
     await todo.hover();
