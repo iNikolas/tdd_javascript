@@ -1,5 +1,5 @@
 import { Todos } from "@/components/containers/todos";
 
 export default function Home() {
-  return <Todos heading="Start a new To-Do list" />;
+  return <Todos className="justify-center" heading="Start a new To-Do list" />;
 }

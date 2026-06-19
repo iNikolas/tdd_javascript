@@ -1,32 +1,28 @@
-import { Suspense } from "react";
-
 import { cn } from "@/utils";
 
-import {
-  CreateTodoInput,
-  TodosList,
-  TodosListHead,
-  TodosListSkeleton,
-} from "./components";
 import { TodosProps } from "./types";
+import { CreateTodoInput } from "./components";
 
-export function Todos({ className, heading, listId, ...props }: TodosProps) {
+export function Todos({
+  className,
+  heading,
+  listId,
+  children,
+  ...props
+}: TodosProps) {
   return (
-    <main className={cn("p-4 w-full max-w-3xl mx-auto", className)} {...props}>
-      <div className="prose mb-4">
-        <h2>{heading}</h2>
-        <p>
-          Manage your tasks and stay organized with your personalized to-do
-          list. Add new items, mark them as complete, and keep track of your
-          progress all in one place.
-        </p>
-      </div>
-      <CreateTodoInput listId={listId} />
-      <TodosListHead>
-        <Suspense fallback={<TodosListSkeleton />}>
-          <TodosList listId={listId} />
-        </Suspense>
-      </TodosListHead>
+    <main
+      className={cn(
+        "container h-screen scroll-auto flex flex-col p-4 mx-auto",
+        className,
+      )}
+      {...props}
+    >
+      <section className="w-full max-w-2xl bg-base-200 p-5 rounded-lg mx-auto mb-4 shadow-lg">
+        <h2 className="text-7xl font-light mb-4 text-center">{heading}</h2>
+        <CreateTodoInput listId={listId} />
+      </section>
+      {children}
     </main>
   );
 }

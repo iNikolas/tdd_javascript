@@ -20,6 +20,7 @@ export function CreateTodoInput({
       onSubmit={onSubmit}
     >
       <Input
+        className="input-lg w-full"
         value={value}
         onChange={onChange}
         type="text"
