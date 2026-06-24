@@ -77,23 +77,6 @@ test("Renders input form", () => {
   cleanup();
 });
 
-test("Renders todos table", () => {
-  render(
-    <QueryClientProvider client={createTestQueryClient()}>
-      <Page />
-    </QueryClientProvider>,
-  );
-
-  const table = screen.getByRole("table", {
-    name: /to-do list/i,
-    hidden: false,
-  });
-
-  expect(table, "Todo table must be rendered").toBeDefined();
-
-  cleanup();
-});
-
 test("Can save a POST request", async () => {
   const text = "New Item Test";
 

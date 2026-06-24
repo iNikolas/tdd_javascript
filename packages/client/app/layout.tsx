@@ -2,6 +2,7 @@ import { Toaster } from "sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { cn } from "@/utils";
 import { ReactQueryProvider } from "@/components/providers/react-query-provider";
 
 import "./globals.css";
@@ -30,7 +31,13 @@ export default function RootLayout({
     <ReactQueryProvider>
       <html
         lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+        className={cn(
+          geistSans.className,
+          geistSans.variable,
+          geistMono.variable,
+          "h-full",
+          "antialiased",
+        )}
       >
         <body className="min-h-full flex flex-col">
           <Toaster />

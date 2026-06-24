@@ -19,7 +19,9 @@ export function Todos({
       {...props}
     >
       <section className="w-full max-w-2xl bg-base-200 p-5 rounded-lg mx-auto mb-4 shadow-lg">
-        <h2 className="text-7xl font-light mb-4 text-center">{heading}</h2>
+        <h2 className="text-7xl font-light font-(family-name:--font-geist-mono) mb-4 text-center">
+          {heading}
+        </h2>
         <CreateTodoInput listId={listId} />
       </section>
       {children}
