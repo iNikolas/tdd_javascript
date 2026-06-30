@@ -14,8 +14,9 @@
     "test:client": "npm run test --workspace=client",
     "test:server": "npm run test --workspace=server",
     "test:e2e": "npm run test --workspace=e2e",
-    "build:shared": "npm run build --workspace=shared",
     "db:push": "npm run db:push --workspace=shared",
+    "build:shared": "npm run build --workspace=shared",
+    "build:client": "npm run build --workspace=client",
     "build:server": "npm run build --workspace=server",
     "start:prod:server": "npm run start:prod --workspace=server"
   },
