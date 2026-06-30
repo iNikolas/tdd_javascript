@@ -50,3 +50,24 @@ TEST_API_URL=http://localhost:8001
 1. Run client tests with `npm run test:client` command
 2. Run server tests with `npm run test:server` command
 3. Run integration test with Playwright via `npm run test:e2e` command
+
+## How to run with Docker
+
+**Build server client**
+
+```
+docker build -f server.Dockerfile -t server:latest .
+```
+
+**Now you can run server Docker image with following commands**
+
+For example we are passing variables to run Docker server instance in Test mode (without real Database):
+
+```
+docker run -it \
+  -e PORT=8001 \
+  -e CLIENT_URL=http://localhost:8000 \
+  -e NODE_ENV=test \
+  -p 8001:8001 \
+  server:latest
+```
