@@ -1,26 +1,41 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:19beta1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1111
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
   server:
     build:
       context: .
       dockerfile: server.Dockerfile
     restart: unless-stopped
     ports:
-      - "8001:8001"
+      - "3001:3001"
     environment:
-      - PORT=8001
+      - PORT=3001
       - CLIENT_URL=http://localhost:3000
-      - NODE_ENV=test
+      - DATABASE_URL=postgresql://postgres:1111@db:5432/postgres
+    depends_on:
+      - db
   frontend:
     build:
       context: .
       dockerfile: client.Dockerfile
       args:
-        - NEXT_PUBLIC_API_URL=http://localhost:8001
-        - NEXT_PUBLIC_INTERNAL_API_URL=http://server:8001
+        - NEXT_PUBLIC_API_URL=http://localhost:3001
+        - NEXT_PUBLIC_INTERNAL_API_URL=http://server:3001
     restart: unless-stopped
     ports:
       - "3000:3000"
     depends_on:
       - server
+volumes:
+  postgres_data:
