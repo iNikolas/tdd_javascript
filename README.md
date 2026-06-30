@@ -53,35 +53,16 @@ TEST_API_URL=http://localhost:8001
 
 ## How to run with Docker
 
-**Build server instance**
+If you have docker installed you can run both server and client with just one command and each time code have changed and you want to incorporate them into docker instances:
 
 ```
-docker build -f server.Dockerfile -t server:latest .
+docker-compose up --build
 ```
 
-**Now you can run server Docker image with following commands**
-
-For example we are passing variables to run Docker server instance in Test mode (without real Database):
+Later on you can spin up same containers with following command:
 
 ```
-docker run -it \
-  -e PORT=3001 \
-  -e CLIENT_URL=http://localhost:3000 \
-  -e NODE_ENV=test \
-  -p 3001:3001 \
-  server:latest
+docker-compose up
 ```
 
-**Build client instance**
-
-```
-docker build -f client.Dockerfile -t client:latest .
-```
-
-**Now you can run client Docker image with following commands**
-
-Note that you need to set `.env` variable at `packages\client\.env` path with `NEXT_PUBLIC_API_URL` variable prior to run Docker build
-
-```
-docker run -p 3000:3000 -it client:latest
-```
+By default it starts local server with ephemeral database without persistence after shutting down the server
