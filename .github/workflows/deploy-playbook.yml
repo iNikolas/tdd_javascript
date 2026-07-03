@@ -1,0 +1,17 @@
+name: Run playbook
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Ansible Playbook to Deploy
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: infra/deploy-playbook.yml
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          inventory: |
+            [oracle]
+            ${{ secrets.SSH_HOST }} ansible_user=${{ secrets.SSH_USERNAME }}

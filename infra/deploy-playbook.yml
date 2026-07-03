@@ -1,0 +1,20 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Install docker and Ansible Docker SDK
+      ansible.builtin.apt:
+        name:
+          - docker.io
+          - python3-docker # FIX 3: Required for community.docker module
+        state: latest
+        update_cache: true
+      become: true
+
+    - name: Run test container
+      community.docker.docker_container:
+        name: testcontainer
+        state: started
+        image: busybox
+        command: echo hello world
+      become: true
