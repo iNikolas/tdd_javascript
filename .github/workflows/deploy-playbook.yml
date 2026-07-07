@@ -1,11 +1,14 @@
 name: Run playbook
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Deploy-Playbook:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Inject Python dependencies into Ansible
+        run: pipx inject ansible-core docker requests
 
       - name: Run Ansible Playbook to Deploy
         uses: dawidd6/action-ansible-playbook@v2
