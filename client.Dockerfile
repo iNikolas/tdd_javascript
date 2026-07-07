@@ -24,8 +24,6 @@ COPY --from=deps /app/packages/shared/package.json ./packages/shared/
 COPY packages/client ./packages/client
 COPY packages/shared ./packages/shared
 
-COPY packages/client/.env ./packages/client/.env
-
 ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_INTERNAL_API_URL
 
