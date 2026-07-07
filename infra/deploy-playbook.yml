@@ -11,20 +11,102 @@
         update_cache: true
       become: true
 
-    - name: Add our user to the docker group, so we don't need sudo/become
+    - name: Add our user to the docker group
       ansible.builtin.user:
         name: "{{ ansible_user }}"
         groups: docker
         append: true
       become: true
 
-    - name: Reset ssh connection to allow the user/group change to take effect
+    - name: Reset ssh connection
       ansible.builtin.meta: reset_connection
 
-    - name: Run test container
-      community.docker.docker_container:
-        name: testcontainer
-        state: started
-        image: busybox
-        command: echo hello world
+    - name: Allow HTTP (80) and HTTPS (443) through UFW
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+      loop:
+        - "80"
+        - "443"
       become: true
+
+    - name: Build server container image locally
+      community.docker.docker_image:
+        name: tdd_javascript/server:latest
+        source: build
+        build:
+          path: ../
+          dockerfile: server.Dockerfile
+        force_source: true
+      delegate_to: 127.0.0.1
+
+    - name: Build frontend container image locally
+      community.docker.docker_image:
+        name: tdd_javascript/frontend:latest
+        source: build
+        build:
+          path: ../
+          dockerfile: client.Dockerfile
+          args:
+            NEXT_PUBLIC_API_URL: "http://{{ vm_public_ip }}/api"
+            NEXT_PUBLIC_INTERNAL_API_URL: "http://server:3001"
+        force_source: true
+      delegate_to: 127.0.0.1
+
+    - name: Export container images locally
+      community.docker.docker_image:
+        name: "{{ item.name }}"
+        archive_path: "/tmp/{{ item.file }}"
+        source: local
+      loop:
+        - { name: "tdd_javascript/server:latest", file: "server-img.tar" }
+        - { name: "tdd_javascript/frontend:latest", file: "frontend-img.tar" }
+      delegate_to: 127.0.0.1
+
+    - name: Upload images to server
+      ansible.builtin.copy:
+        src: "/tmp/{{ item }}"
+        dest: "/tmp/{{ item }}"
+      loop:
+        - server-img.tar
+        - frontend-img.tar
+
+    - name: Ensure target project directory exists
+      ansible.builtin.file:
+        path: /opt/my-app
+        state: directory
+        mode: "0755"
+      become: true
+
+    - name: Upload configuration files
+      ansible.builtin.copy:
+        src: "../{{ item }}"
+        dest: "/opt/my-app/{{ item }}"
+      loop:
+        - docker-compose.yml
+        - Caddyfile
+      become: true
+
+    - name: Create .env file for Docker Compose
+      ansible.builtin.copy:
+        dest: /opt/my-app/.env
+        content: |
+          VM_PUBLIC_IP={{ vm_public_ip }}
+      become: true
+
+    - name: Import container images on server
+      community.docker.docker_image:
+        name: "{{ item.name }}"
+        load_path: "/tmp/{{ item.file }}"
+        source: load
+        force_source: true
+        state: present
+      loop:
+        - { name: "tdd_javascript/server:latest", file: "server-img.tar" }
+        - { name: "tdd_javascript/frontend:latest", file: "frontend-img.tar" }
+
+    - name: Run Docker Compose
+      community.docker.docker_compose_v2:
+        project_src: /opt/my-app
+        state: present

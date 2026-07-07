@@ -15,3 +15,5 @@ jobs:
           inventory: |
             [oracle]
             ${{ secrets.SSH_HOST }} ansible_user=${{ secrets.SSH_USERNAME }}
+          options: |
+            --extra-vars "vm_public_ip=${{ secrets.SSH_HOST }}"

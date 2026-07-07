@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -8,34 +8,40 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1111
       - POSTGRES_DB=postgres
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
+
   server:
-    build:
-      context: .
-      dockerfile: server.Dockerfile
+    image: tdd_javascript/server:latest
     restart: unless-stopped
-    ports:
-      - "3001:3001"
     environment:
       - PORT=3001
-      - CLIENT_URL=http://localhost:3000
+      - CLIENT_URL=http://${VM_PUBLIC_IP}
       - DATABASE_URL=postgresql://postgres:1111@db:5432/postgres
     depends_on:
       - db
+
   frontend:
-    build:
-      context: .
-      dockerfile: client.Dockerfile
-      args:
-        - NEXT_PUBLIC_API_URL=http://localhost:3001
-        - NEXT_PUBLIC_INTERNAL_API_URL=http://server:3001
+    image: tdd_javascript/frontend:latest
     restart: unless-stopped
-    ports:
-      - "3000:3000"
     depends_on:
       - server
+
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - server
+
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:
