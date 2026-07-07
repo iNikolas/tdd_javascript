@@ -84,6 +84,7 @@
         dest: /opt/my-app/.env
         content: |
           VM_PUBLIC_IP={{ vm_public_ip }}
+          POSTGRES_PASSWORD={{ db_password }}
       become: true
 
     - name: Import container images on server
@@ -96,6 +97,23 @@
       loop:
         - { name: "tdd_javascript/server:latest", file: "server-img.tar" }
         - { name: "tdd_javascript/frontend:latest", file: "frontend-img.tar" }
+
+    - name: Start the database first (and wait for it to be ready)
+      community.docker.docker_compose_v2:
+        project_src: /opt/my-app
+        state: present
+        services:
+          - db
+
+    - name: Wait 10 seconds for Postgres to initialize
+      ansible.builtin.pause:
+        seconds: 10
+
+    - name: Run the migration in a temporary container
+      ansible.builtin.command:
+        cmd: docker compose run --rm server npm run db:migrate
+        chdir: /opt/my-app
+      become: true
 
     - name: Run Docker Compose
       community.docker.docker_compose_v2:

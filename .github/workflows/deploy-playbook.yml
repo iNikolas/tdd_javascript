@@ -19,4 +19,4 @@ jobs:
             [oracle]
             ${{ secrets.SSH_HOST }} ansible_user=${{ secrets.SSH_USERNAME }}
           options: |
-            --extra-vars "vm_public_ip=${{ secrets.SSH_HOST }}"
+            --extra-vars "vm_public_ip=${{ secrets.SSH_HOST }} db_password=${{ secrets.PROD_DB_PASSWORD }}"

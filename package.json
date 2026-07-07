@@ -14,6 +14,8 @@
     "test:client": "npm run test --workspace=client",
     "test:server": "npm run test --workspace=server",
     "test:e2e": "npm run test --workspace=e2e",
+    "db:generate": "npm run db:generate --workspace=shared",
+    "db:migrate": "npm run db:migrate --workspace=shared",
     "db:push": "npm run db:push --workspace=shared",
     "build:shared": "npm run build --workspace=shared",
     "build:client": "npm run build --workspace=client",

@@ -31,4 +31,8 @@ RUN npm ci --omit=dev
 COPY --from=builder /app/packages/server/dist ./packages/server/dist
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 
+COPY --from=builder /app/packages/shared/drizzle ./packages/shared/drizzle
+COPY --from=builder /app/packages/shared/drizzle.config.ts ./packages/shared/
+COPY --from=builder /app/packages/shared/db/schema.ts ./packages/shared/db/
+
 CMD ["npm", "run", "start:prod:server"]
