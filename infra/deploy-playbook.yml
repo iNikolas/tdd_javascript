@@ -7,6 +7,7 @@
         name:
           - docker.io
           - python3-docker
+          - docker-compose-v2
         state: latest
         update_cache: true
       become: true
