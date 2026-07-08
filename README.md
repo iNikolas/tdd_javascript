@@ -25,9 +25,10 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 
 1. You don't need an environment variables at all
 2. Ensure all dependencies are installed with `npm install` from the root folder
-3. Run server with `npm run e2e:server` command
-4. Run client with `npm run e2e:client` command
-5. Navigate to `http://localhost:8000` to see the app
+3. Don't forget to build shared dependencies package: `npm run build:shared`
+4. Run server with `npm run e2e:server` command
+5. Run client with `npm run e2e:client` command
+6. Navigate to `http://localhost:8000` to see the app
 
 ## Running test
 
