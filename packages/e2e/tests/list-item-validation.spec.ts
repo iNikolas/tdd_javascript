@@ -5,19 +5,28 @@ import { test } from "../fixtures/pages";
 
 test.describe("Item validation test", () => {
   test("Cannot add empty list items", async ({ todoPage }) => {
-    // Edith goes to the home page and accidentally tries to submit
-    // an empty list item. She hits Enter on the empty input box
+    await test.step("User goes to the home page and accidentally tries to submit an empty list item. He hits Enter on the empty input box", async () => {
+      await todoPage.waitForPageLoad();
+      await todoPage.addToDo("");
+    });
 
-    // The home page refreshes, and there is an error message saying
-    // that list items cannot be blank
+    await test.step("The home page refreshes, and there is an error message saying that list items cannot be blank", async () => {
+      await todoPage.testErrorMessageVisible();
+    });
 
-    // She tries again with some text for the item, which now works
+    await test.step("User tries again with some text for the item, which now works", async () => {
+      const text = uuidv4();
+      await todoPage.testAddToDo(text);
+    });
 
-    // Perversely, she now decides to submit a second blank list item
+    await test.step("Perversely, User now decides to submit a second blank list item and he receives a similar warning on the list page", async () => {
+      await todoPage.addToDo("");
+      await todoPage.testErrorMessageVisible();
+    });
 
-    // She receives a similar warning on the list page
-
-    // And she can correct it by filling some text in
-    throw new Error("Not implemented yet");
+    await test.step("User can fill in some text for the second item, and it works", async () => {
+      const text = uuidv4();
+      await todoPage.testAddToDo(text);
+    });
   });
 });

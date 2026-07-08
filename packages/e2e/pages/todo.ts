@@ -35,6 +35,24 @@ export class TodoPage {
     });
   }
 
+  async testErrorMessageVisible(text?: string | RegExp) {
+    await expect(
+      this.getTodoInputBox(),
+      "Input must show invalid state",
+    ).toHaveAttribute("aria-invalid", "true");
+
+    const expectedText = text ?? /error:/i;
+
+    const errorMessage = this.page
+      .getByRole("alert")
+      .filter({ hasText: expectedText });
+
+    await expect(errorMessage, "Error message must be visible").toBeVisible();
+    await expect(errorMessage, "Error message must be correct").toHaveText(
+      expectedText,
+    );
+  }
+
   getTodoInputBox() {
     return this.inputBox;
   }

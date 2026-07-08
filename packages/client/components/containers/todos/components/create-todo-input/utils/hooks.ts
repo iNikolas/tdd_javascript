@@ -7,7 +7,7 @@ export function useInputMutationState(listId?: string) {
   const router = useRouter();
 
   const [value, setValue] = React.useState("");
-  const { mutateAsync, variables, error } = useCreateTodoMutation();
+  const { mutateAsync, variables, error, ...other } = useCreateTodoMutation();
 
   const prevText = variables?.text ?? "";
 
@@ -19,6 +19,7 @@ export function useInputMutationState(listId?: string) {
 
   return {
     value,
+    error,
     onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
       mutateAsync({ text: value, listId }).then(({ listId: newListId }) => {
@@ -30,5 +31,6 @@ export function useInputMutationState(listId?: string) {
     },
     onChange: (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) =>
       setValue(e.target.value),
+    ...other,
   };
 }

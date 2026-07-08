@@ -11,7 +11,8 @@ export function CreateTodoInput({
   listId,
   ...props
 }: CreateTodoInputProps) {
-  const { value, onSubmit, onChange } = useInputMutationState(listId);
+  const { value, onSubmit, onChange, error, reset } =
+    useInputMutationState(listId);
 
   return (
     <form
@@ -19,16 +20,29 @@ export function CreateTodoInput({
       className={cn(className, "flex justify-center mb-4")}
       onSubmit={onSubmit}
     >
-      <Input
-        className="input-lg w-full"
-        value={value}
-        onChange={onChange}
-        type="text"
-        id="new-todo"
-        name="new-todo"
-        placeholder="Enter a to-do item"
-        {...props}
-      />
+      <div className="flex flex-col w-full gap-2">
+        <Input
+          className={cn("input-lg w-full", !!error && "input-error")}
+          value={value}
+          onChange={(e) => {
+            onChange(e);
+            if (error) {
+              reset();
+            }
+          }}
+          type="text"
+          id="new-todo"
+          name="new-todo"
+          placeholder="Enter a to-do item"
+          {...(!!error && { "aria-invalid": true })}
+          {...props}
+        />
+        {error && (
+          <p className="text-error text-sm" role="alert">
+            Error: {error.message}
+          </p>
+        )}
+      </div>
     </form>
   );
 }
