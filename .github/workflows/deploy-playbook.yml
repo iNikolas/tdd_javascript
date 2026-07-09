@@ -1,5 +1,11 @@
 name: Run playbook
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
   Deploy-Playbook:
     runs-on: ubuntu-latest
