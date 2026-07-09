@@ -29,4 +29,21 @@ test.describe("Item validation test", () => {
       await todoPage.testAddToDo(text);
     });
   });
+
+  test("Cannot add duplicate list items", async ({ todoPage }) => {
+    const text = uuidv4();
+
+    await test.step("User goes to the home page and adds a new list item", async () => {
+      await todoPage.waitForPageLoad();
+      await todoPage.testAddToDo(text);
+    });
+
+    await test.step("User accidentally tries to enter a duplicate item", async () => {
+      await todoPage.addToDo(text);
+    });
+
+    await test.step("User sees a helpful error message", async () => {
+      await todoPage.testErrorMessageVisible();
+    });
+  });
 });
