@@ -1,10 +1,12 @@
 "use client";
 
+import { PiWarningCircle } from "react-icons/pi";
+
+import { cn } from "@/utils";
 import { Input } from "@/components/ui/input";
 
 import { CreateTodoInputProps } from "./types";
 import { useInputMutationState } from "./utils";
-import { cn } from "@/utils";
 
 export function CreateTodoInput({
   className,
@@ -22,6 +24,14 @@ export function CreateTodoInput({
     >
       <div className="flex flex-col w-full gap-2">
         <Input
+          {...(!!error && {
+            slots: [
+              <PiWarningCircle
+                key="warning-icon"
+                className="text-error text-2xl"
+              />,
+            ],
+          })}
           className={cn("input-lg w-full", !!error && "input-error")}
           value={value}
           onChange={(e) => {
