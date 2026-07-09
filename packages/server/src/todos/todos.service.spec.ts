@@ -18,4 +18,19 @@ describe('TodosService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('duplicate items are invalid', async () => {
+    const text = 'duplicate item test';
+
+    const { listId } = await service.create({ text });
+    expect(service.create({ text }, listId)).rejects.toThrow();
+  });
+
+  it('CAN save same item to different lists', async () => {
+    const text = 'duplicate item test';
+
+    const { listId } = await service.create({ text });
+    const { listId: newListId } = await service.create({ text });
+    expect(listId).not.toEqual(newListId);
+  });
 });
