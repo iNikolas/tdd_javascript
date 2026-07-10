@@ -28,29 +28,45 @@ export class TodoPage {
     await this.inputBox.press("Enter");
   }
 
-  async testAddToDo(text = uuidv4()) {
+  async expectAddToDo(text = uuidv4()) {
     await test.step(`User Types "${text}" into a text box`, async () => {
       await this.addToDo(text);
-      await this.checkForRow(text);
+      await this.expectRow(text);
     });
   }
 
-  async testErrorMessageVisible(text?: string | RegExp) {
-    await expect(
-      this.getTodoInputBox(),
-      "Input must show invalid state",
-    ).toHaveAttribute("aria-invalid", "true");
-
+  async expectErrorMessageState(
+    state: "visible" | "hidden",
+    text?: string | RegExp,
+  ) {
     const expectedText = text ?? /error:/i;
-
     const errorMessage = this.page
       .getByRole("alert")
       .filter({ hasText: expectedText });
+    const inputBox = this.getTodoInputBox();
 
-    await expect(errorMessage, "Error message must be visible").toBeVisible();
-    await expect(errorMessage, "Error message must be correct").toHaveText(
-      expectedText,
-    );
+    if (state === "visible") {
+      await expect(inputBox, "Input must show invalid state").toHaveAttribute(
+        "aria-invalid",
+        "true",
+      );
+
+      await expect(errorMessage, "Error message must be visible").toBeVisible();
+      await expect(errorMessage, "Error message must be correct").toHaveText(
+        expectedText,
+      );
+
+      return;
+    }
+
+    await expect(
+      inputBox,
+      "Input must not show invalid state",
+    ).not.toHaveAttribute("aria-invalid", "true");
+    await expect(
+      errorMessage,
+      "Error message must not be visible",
+    ).not.toBeVisible();
   }
 
   getTodoInputBox() {
@@ -67,7 +83,7 @@ export class TodoPage {
     });
   }
 
-  async checkForRow(text: string) {
+  async expectRow(text: string) {
     const row = this.getRowByText(text);
 
     await expect(row, `"${text}" to-do item didn't appear`).toBeVisible();

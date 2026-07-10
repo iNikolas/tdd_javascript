@@ -28,7 +28,7 @@ test.describe("New Visitor test", () => {
     await test.step("Second user starts a new to-do list", async () => {
       await todoPage.waitForPageLoad();
 
-      await todoPage.testAddToDo(firstText);
+      await todoPage.expectAddToDo(firstText);
 
       await test.step("Second user notices that his list has a unique URL", async () => {
         await expect(todoPage.page).toHaveURL(/\/lists\/.+/gi);
@@ -52,7 +52,7 @@ test.describe("New Visitor test", () => {
       const secondText = uuidv4();
 
       await test.step("Third user starts a new list by entering a new item", async () => {
-        await todoPage.testAddToDo(secondText);
+        await todoPage.expectAddToDo(secondText);
       });
 
       await test.step("Third user gets his own unique URL", async () => {

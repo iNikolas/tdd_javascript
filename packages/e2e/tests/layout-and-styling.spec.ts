@@ -22,7 +22,7 @@ test.describe("Layout and styling", () => {
 
     await test.step("User starts a new list and sees the input is nicely centered there too", async () => {
       const text = uuidv4();
-      await todoPage.testAddToDo(text);
+      await todoPage.expectAddToDo(text);
     });
   });
 });
