@@ -1,6 +1,11 @@
-## Required environment variables
+## How to run the project locally in development mode
 
-**Place to `packages/server/.env`**
+1. Ensure `npm install` command is executed from the root folder
+2. Start server instance with `npm run dev:server`
+3. Start client instance with `npm run dev:client`
+4. Test application at `http://localhost:3000`
+
+**Required environment variables. Place to `packages/server/.env`**
 
 ```
 PORT=3001 // For local development to eliminate port usage conflict with client
@@ -13,13 +18,6 @@ DATABASE_URL=postgresql://postgres:1111@localhost:5432 // Postgresql DB URL
 ```
 NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
-
-## How to run the project locally
-
-1. Ensure `npm install` command is executed from the root folder
-2. Start server instance with `npm run dev:server`
-3. Start client instance with `npm run dev:client`
-4. Test application at `http://localhost:3000`
 
 **For testing purposes** without Database persistence
 
@@ -52,12 +50,12 @@ TEST_API_URL=http://localhost:8001
 2. Run server tests with `npm run test:server` command
 3. Run integration test with Playwright via `npm run test:e2e` command
 
-## How to run with Docker
+## How to run production build with Docker
 
-If you have docker installed you can run both server and client with just one command and each time code have changed and you want to incorporate them into docker instances:
+If you have docker installed you can run both server and client in fully fledged production mode locally with just one command (**no .env variables required**). Don't forget, Each time code have changed and you want to incorporate them into Docker instances:
 
 ```
-docker-compose up --build
+npm run infra:setup
 ```
 
 Later on you can spin up same containers with following command:
@@ -66,4 +64,10 @@ Later on you can spin up same containers with following command:
 docker-compose up
 ```
 
-By default it starts local server with ephemeral database without persistence after shutting down the server
+You can visit web site just pasting into web browser: `http://localhost/`
+
+**Run e2e tests against Production env locally**
+
+```
+BASE_URL=http://localhost npm run test:e2e
+```
