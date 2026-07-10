@@ -1,0 +1,1 @@
+ALTER TABLE "item" ADD CONSTRAINT "unique_text_per_list" UNIQUE("text","listId");
