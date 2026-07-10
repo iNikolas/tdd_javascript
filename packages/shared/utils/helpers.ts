@@ -66,42 +66,45 @@ export function extractErrorMessage(
   if (typeof error === "object") {
     const errorObj = error as Record<string, unknown>;
 
-    if (errorObj.error && typeof errorObj.error === "string") {
-      return errorObj.error;
-    }
-
-    if (errorObj.error && typeof errorObj.error === "object") {
-      const nestedError = errorObj.error;
-
-      if (
-        "message" in nestedError &&
-        typeof nestedError.message === "string" &&
-        nestedError.message
-      ) {
-        return nestedError.message;
+    if (errorObj.message) {
+      if (Array.isArray(errorObj.message)) {
+        const messages = errorObj.message.filter((m) => typeof m === "string");
+        if (messages.length > 0) {
+          return messages.join(", ");
+        }
       }
 
-      if (typeof nestedError === "string" && nestedError) {
-        return nestedError;
+      if (typeof errorObj.message === "string" && errorObj.message.trim()) {
+        return errorObj.message;
       }
     }
 
-    if (typeof errorObj.message === "string" && errorObj.message) {
-      return errorObj.message;
-    }
-
-    // Zod validation errors: { errors: [...] }
     if (Array.isArray(errorObj.errors) && errorObj.errors.length > 0) {
       const firstError = errorObj.errors[0];
       if (firstError && typeof firstError === "object") {
         const zodError = firstError as Record<string, unknown>;
-        // Format: "field: message"
         const path = Array.isArray(zodError.path)
           ? zodError.path.join(".")
           : "field";
         const message = zodError.message || "validation error";
         return `${path}: ${message}`;
       }
+    }
+
+    if (errorObj.error && typeof errorObj.error === "object") {
+      const nestedError = errorObj.error as Record<string, unknown>;
+
+      if (
+        "message" in nestedError &&
+        typeof nestedError.message === "string" &&
+        nestedError.message.trim()
+      ) {
+        return nestedError.message;
+      }
+    }
+
+    if (typeof errorObj.error === "string" && errorObj.error.trim()) {
+      return errorObj.error;
     }
 
     try {
